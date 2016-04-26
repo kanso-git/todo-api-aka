@@ -14,9 +14,18 @@ app.get('/', function(req, res) {
     res.send('Todo API Root');
 });
 
-//GET /todos
+//GET /todos?completed= true | false // enable filtering on completed property
 app.get('/todos', function(req, res) {
-    res.json(todos);
+    var queryParam = req.query;
+    var filteredTodos = todos;
+    
+    if(queryParam.hasOwnProperty('completed') && queryParam.completed === 'true'){
+        filteredTodos = _.findWhere(filteredTodos,{completed:true});
+    }else if(queryParam.hasOwnProperty('completed') && queryParam.completed === 'false'){
+            filteredTodos = _.findWhere(filteredTodos,{completed:false});
+        
+    }
+    res.json(filteredTodos);
 })
 
 // GET /todos/:id
